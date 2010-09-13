@@ -389,6 +389,20 @@ module Geokit
         adapter.flat_distance_sql(origin, lat_degree_units, lng_degree_units)
       end
       
+      # Hard-copied from http://api.rubyonrails.org/classes/ActiveRecord/Base.html#M002310
+      def merge_conditions(*conditions)
+        segments = []
+
+        conditions.each do |condition|
+          unless condition.blank?
+            sql = sanitize_sql(condition)
+            segments << sql unless sql.blank?
+          end
+        end
+
+        "(#{segments.join(') AND (')})" unless segments.empty?
+      end
+      
     end # ClassMethods
 
     # this is the callback for auto_geocoding
